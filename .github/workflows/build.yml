@@ -1,0 +1,22 @@
+name: Build & Test
+
+on:
+ workflow_dispatch:
+
+
+jobs:
+
+  build:
+    runs-on: windows-2022
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Build the Nano 1809 Docker image
+      run: |
+        docker build --isolation=hyperv -t windows2019-from-2022-test .
+
+    - name: Run and test the image
+      run: |
+        docker run --rm --isolation=hyperv windows2019-from-2022-test
