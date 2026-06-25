@@ -3,7 +3,7 @@
 # ==========================================
 FROM mcr.microsoft.com/windows/servercore:ltsc2019 AS builder
 
-WORKDIR C:\downloads
+WORKDIR C:/downloads
 
 RUN powershell -Command \
     $ErrorActionPreference = 'Stop'; \
@@ -12,14 +12,15 @@ RUN powershell -Command \
     Rename-Item C:\node-v20.11.0-win-x64 C:\node
 
 # ==========================================
-# STAGE 2: Nano Server 1809 Final Image  (1809 is equivilent of 2019 and suitable for its kernal)
+# STAGE 2: Ultra-lean Nano Server 1809 Final Image
 # ==========================================
 FROM mcr.microsoft.com/windows/nanoserver:1809
 
-WORKDIR C:\app
+# FIX: Use forward slashes
+WORKDIR C:/app
 
 # Copy Node.js from the builder stage
-COPY --from=builder C:\node C:\node
+COPY --from=builder C:/node C:/node
 
 # Copy your local app file
 COPY app.js .
